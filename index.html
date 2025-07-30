@@ -87,15 +87,36 @@
                 try {
                     const friendsInfo = friends.map(f => `${f.name}${f.memory ? ` (${f.memory})` : ''}`).join(', ');
                     
-                    const prompt = `Create an engaging, educational story about "${topic}" that incorporates these friends: ${friendsInfo}. 
+                    const prompt = `Generate a comprehensive, fun, and memorable educational answer about "${topic}" that incorporates these friends: ${friendsInfo}. 
 
-                    Make it feel like a real experience where the friends naturally demonstrate or encounter the concept of "${topic}" in their daily lives. Include:
-                    - A specific scenario where they interact with the topic
-                    - How each friend's personality (based on their memory/trait) influences their approach
-                    - Clear educational content about ${topic} woven naturally into the story
-                    - A satisfying conclusion that reinforces the learning
-
-                    Write it in first person as if recounting a memory. Make it warm, relatable, and educational. Keep it concise but impactful.`;
+                    🎯 **REQUIREMENTS:**
+                    
+                    1. **📚 Academic Definition**: Start with the exact formal definition that would be expected on an Anna University answer sheet - precise, technical, and complete.
+                    
+                    2. **🧒 5th Grade Explanation**: Break down the concept from absolute basics, assuming zero prior knowledge. Use simple words and build up step by step.
+                    
+                    3. **📋 Conceptual Order**: Structure the explanation in logical, sequential steps that build upon each other naturally.
+                    
+                    4. **🎭 Friend Story Integration**: Weave in a relatable story featuring ${friendsInfo} that demonstrates the concept in action, using their personalities/traits.
+                    
+                    5. **😊 Cute Emojis & Memory Aids**: Include relevant emojis throughout and create memorable phrases, rhymes, or mental images that help recall key points.
+                    
+                    6. **🔄 Reinforcement**: End with a summary that connects the story back to the academic definition and provides memory hooks.
+                    
+                    **FORMAT:**
+                    📖 **Official Definition**: [Anna University style definition]
+                    
+                    🎯 **Simple Explanation**: [5th grade level breakdown]
+                    
+                    📚 **Step-by-Step Concepts**: [Logical order building blocks]
+                    
+                    👥 **Friend Story**: [Engaging story with ${friendsInfo}]
+                    
+                    🧠 **Memory Hooks**: [Emojis, rhymes, and recall techniques]
+                    
+                    ✅ **Quick Recap**: [Connect story to definition]
+                    
+                    Make it comprehensive, memorable, and academically sound while keeping it engaging and fun!`;
 
                     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
                         method: 'POST',
@@ -110,7 +131,7 @@
                                 role: 'user',
                                 content: prompt
                             }],
-                            max_tokens: 1000,
+                            max_tokens: 2000,
                             temperature: 0.7
                         })
                     });
@@ -122,7 +143,14 @@
                     const data = await response.json();
                     const generatedStory = data.choices[0]?.message?.content || 'Sorry, I couldn\'t generate a story right now.';
                     
-                    setStory(generatedStory.replace(/\n/g, '<br>'));
+                    // Format the response with better line breaks and structure
+                    const formattedStory = generatedStory
+                        .replace(/\n\n/g, '</p><p>')
+                        .replace(/\n/g, '<br>')
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/📖|🎯|📚|👥|🧠|✅/g, '<br><br>$&');
+                    
+                    setStory(`<p>${formattedStory}</p>`);
                 } catch (error) {
                     console.error('Error generating story:', error);
                     setStory(`<div style="color: #ef4444;">❌ Error generating story: ${error.message}</div>`);
