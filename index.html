@@ -249,6 +249,89 @@
             flex: 1;
         }
         
+        .api-info-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+        
+        .api-info-content {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .api-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .close-btn {
+            background: #8e8e93;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .close-btn:hover {
+            background: #6d6d70;
+        }
+        
+        .api-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+        }
+        
+        .api-status.connected {
+            background: rgba(48, 209, 88, 0.1);
+            border: 1px solid rgba(48, 209, 88, 0.2);
+            color: #248a3d;
+        }
+        
+        .api-status.error {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid rgba(255, 59, 48, 0.2);
+            color: #d70015;
+        }
+        
+        .api-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .small-btn {
+            padding: 0.5rem 1rem !important;
+            font-size: 0.9rem !important;
+            margin: 0 !important;
+            width: auto !important;
+        }
+        
         .empty-state {
             color: #86868b;
             text-align: center;
@@ -418,13 +501,30 @@
             const [isLoading, setIsLoading] = useState(false);
             const [apiKey, setApiKey] = useState(localStorage.getItem('openrouter_api_key') || '');
             const [showApiKeyForm, setShowApiKeyForm] = useState(!localStorage.getItem('openrouter_api_key'));
+            const [showApiInfo, setShowApiInfo] = useState(false);
+            const [apiError, setApiError] = useState(false);
 
             const saveApiKey = (e) => {
                 e.preventDefault();
                 if (apiKey.trim()) {
                     localStorage.setItem('openrouter_api_key', apiKey.trim());
                     setShowApiKeyForm(false);
+                    setApiError(false);
                 }
+            };
+
+            const changeApiKey = () => {
+                setShowApiKeyForm(true);
+                setApiError(false);
+                setStory('');
+            };
+
+            const removeApiKey = () => {
+                localStorage.removeItem('openrouter_api_key');
+                setApiKey('');
+                setShowApiKeyForm(true);
+                setApiError(false);
+                setStory('');
             };
 
             const addFriend = (e) => {
@@ -519,7 +619,11 @@
                     setStory(`<p>${formattedStory}</p>`);
                 } catch (error) {
                     console.error('Error generating story:', error);
-                    setStory(`<div style="color: #ef4444;">❌ Error generating story: ${error.message}</div>`);
+                    setApiError(true);
+                    setStory(`<div style="color: #ff3b30; background: rgba(255, 59, 48, 0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255, 59, 48, 0.2);">
+                        <strong>❌ API Error: ${error.message}</strong>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">This might be due to an invalid API key, insufficient credits, or network issues.</p>
+                    </div>`);
                 } finally {
                     setIsLoading(false);
                 }
@@ -530,6 +634,7 @@
                     <h1>🎓 Atti Tutor</h1>
                     <p className="subtitle">Learn anything through stories about your friends</p>
                     
+                    {/* API Key Form */}
                     {showApiKeyForm && (
                         <div className="form api-key-form">
                             <h3>🔑 API Key Required</h3>
@@ -547,10 +652,47 @@
                                     placeholder="Enter your OpenRouter API key"
                                     required
                                 />
-                                <button type="submit" className="green-btn">
-                                    Save API Key
-                                </button>
+                                <div className="api-actions">
+                                    <button type="submit" className="green-btn">
+                                        Save API Key
+                                    </button>
+                                    {apiKey && (
+                                        <button 
+                                            type="button" 
+                                            onClick={() => setShowApiKeyForm(false)}
+                                            className="gray-btn small-btn"
+                                        >
+                                            Cancel
+                                        </button>
+                                    )}
+                                </div>
                             </form>
+                        </div>
+                    )}
+                    
+                    {/* API Management Bar */}
+                    {apiKey && !showApiKeyForm && (
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem'}}>
+                            <div style={{display: 'flex', gap: '0.5rem'}}>
+                                <button 
+                                    onClick={() => setShowApiInfo(true)}
+                                    className="small-btn"
+                                    style={{background: '#007aff'}}
+                                >
+                                    ℹ️ API Info
+                                </button>
+                                <button 
+                                    onClick={changeApiKey}
+                                    className="orange-btn small-btn"
+                                >
+                                    🔄 Change Key
+                                </button>
+                            </div>
+                            {apiError && (
+                                <div style={{color: '#ff3b30', fontSize: '0.9rem', fontWeight: '600'}}>
+                                    ⚠️ API Issue Detected
+                                </div>
+                            )}
                         </div>
                     )}
                     
@@ -650,6 +792,68 @@
                     
                     {story && (
                         <div className="story" dangerouslySetInnerHTML={{__html: story}} />
+                    )}
+                    
+                    {/* API Error Recovery */}
+                    {apiError && story && (
+                        <div style={{textAlign: 'center', marginTop: '1rem'}}>
+                            <button onClick={changeApiKey} className="orange-btn">
+                                🔧 Fix API Key
+                            </button>
+                        </div>
+                    )}
+                    
+                    {/* API Info Modal */}
+                    {showApiInfo && (
+                        <div className="api-info-modal" onClick={() => setShowApiInfo(false)}>
+                            <div className="api-info-content" onClick={(e) => e.stopPropagation()}>
+                                <div className="api-info-header">
+                                    <h3>🔑 API Information</h3>
+                                    <button className="close-btn" onClick={() => setShowApiInfo(false)}>×</button>
+                                </div>
+                                
+                                <div className={`api-status ${apiError ? 'error' : 'connected'}`}>
+                                    {apiError ? (
+                                        <>
+                                            <span>❌</span>
+                                            <span><strong>API Error Detected</strong> - Key may be invalid or out of credits</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span>✅</span>
+                                            <span><strong>API Connected</strong> - Ready to generate stories</span>
+                                        </>
+                                    )}
+                                </div>
+                                
+                                <div style={{fontSize: '0.95rem', lineHeight: '1.6'}}>
+                                    <p><strong>Current Key:</strong> ••••••••{apiKey.slice(-4)}</p>
+                                    <p><strong>Model:</strong> Qwen-2.5-72B-Instruct</p>
+                                    <p><strong>Max Tokens:</strong> 2000</p>
+                                    <p><strong>Provider:</strong> OpenRouter.ai</p>
+                                    
+                                    <h4 style={{marginTop: '1.5rem', marginBottom: '0.5rem'}}>🛠️ Troubleshooting:</h4>
+                                    <ul style={{paddingLeft: '1.5rem'}}>
+                                        <li>Check your API key is valid at <a href="https://openrouter.ai/keys" target="_blank" style={{color: '#007aff'}}>OpenRouter.ai</a></li>
+                                        <li>Ensure you have sufficient credits</li>
+                                        <li>Verify your internet connection</li>
+                                        <li>Try generating a simpler topic first</li>
+                                    </ul>
+                                </div>
+                                
+                                <div className="api-actions">
+                                    <button onClick={changeApiKey} className="orange-btn small-btn">
+                                        🔄 Change Key
+                                    </button>
+                                    <button onClick={removeApiKey} className="small-btn" style={{background: '#ff3b30'}}>
+                                        🗑️ Remove Key
+                                    </button>
+                                    <button onClick={() => setShowApiInfo(false)} className="gray-btn small-btn">
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     )}
                 </div>
             );

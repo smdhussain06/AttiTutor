@@ -11,6 +11,8 @@
 - **Structured Learning** - Logical, step-by-step conceptual building
 - **Memory Aids** - Emojis, rhymes, and recall techniques
 - **Comprehensive Responses** - Up to 2000 tokens for detailed explanations
+- **API Management System** - Easy key switching, error recovery, and troubleshooting
+- **Smart Error Handling** - Automatic detection and user-friendly recovery options
 
 ### 👥 **Friendship-Based Learning**
 - **Personalized Stories** - Uses your friends' personalities and memories
@@ -19,17 +21,21 @@
 - **Emotional Connection** - Makes learning memorable through relationships
 
 ### 🍎 **Apple-Inspired Design**
-- **Glassmorphism UI** - Frosted glass effects with backdrop blur
+- **Flat Color System** - Clean iOS colors without gradients for modern aesthetic
+- **Glassmorphism UI** - Frosted glass effects with backdrop blur on main container
 - **SF Pro Typography** - Apple's signature font family
-- **iOS Color Palette** - Native blue, green, orange, and red gradients
+- **iOS Color Palette** - Native blue, green, orange, and red flat colors
 - **Smooth Animations** - 0.3s ease transitions with hover effects
 - **Touch-Optimized** - 32px+ tap targets for mobile interaction
 - **Responsive Design** - Seamless experience across all devices
+- **Modal System** - Professional overlay interactions for API management
 
 ### 🔒 **Privacy & Security**
 - **Local Storage** - API keys stored securely in browser
 - **No Data Collection** - Your conversations stay private
 - **Transparent Usage** - Clear API key requirements and usage
+- **Key Management** - Easy switching, removal, and troubleshooting tools
+- **Error Recovery** - Graceful handling of API issues with user guidance
 
 ## 🚀 Live Demo
 
@@ -79,12 +85,13 @@
 ### **Apple-Inspired Aesthetics**
 ```css
 /* Core Design Principles */
-- Glassmorphism: backdrop-filter: blur(20px)
+- Flat Colors: Pure iOS colors (#007AFF, #30D158, #FF9500, #FF3B30)
+- Glassmorphism: backdrop-filter: blur(20px) on main container
 - Typography: -apple-system, BlinkMacSystemFont, 'SF Pro Display'
-- Colors: iOS semantic colors (#007AFF, #30D158, #FF9500, #FF3B30)
 - Spacing: Generous padding (2.5rem, 3rem) for breathing room
 - Corners: Consistent 12px-20px border radius
 - Shadows: Layered shadows for depth (0 10px 40px + 0 1px 3px)
+- Performance: No gradients for faster rendering
 ```
 
 ### **Interaction Design**
@@ -161,6 +168,8 @@ The app uses advanced prompt engineering for optimal learning:
 1. Open the app and enter your OpenRouter API key
 2. Key is securely stored in browser localStorage
 3. No server-side storage or data collection
+4. Use **API Info** button to check connection status
+5. **Change Key** anytime if needed or experiencing issues
 
 ### **Step 2: Add Friends**
 1. Click "+ Add Friend" to add learning companions
@@ -171,6 +180,13 @@ The app uses advanced prompt engineering for optimal learning:
 1. Enter any topic you want to learn about
 2. Click "Create My Learning Story! 📚"
 3. Receive a comprehensive, personalized explanation
+
+### **API Management Features**
+- **ℹ️ API Info** - View connection status, key details, and troubleshooting tips
+- **🔄 Change Key** - Switch API keys easily without losing progress
+- **🚨 Error Recovery** - Automatic detection of API issues with recovery options
+- **🗑️ Remove Key** - Start fresh with a new API key
+- **📊 Status Display** - Visual indicators for API health and connection state
 
 ### **Example Learning Session**
 ```
@@ -211,6 +227,8 @@ photosynthesis in Alex's garden, complete with:
 - [ ] **Study Groups** - Share friends and stories with classmates
 - [ ] **Progress Tracking** - Learning analytics and achievement system
 - [ ] **Offline Mode** - Cached stories for offline review
+- [ ] **API Provider Options** - Support for multiple AI providers
+- [ ] **Advanced Error Recovery** - Automatic retry and fallback systems
 
 ### **Advanced Features**
 - [ ] **Multi-Language** - Learn in your preferred language
@@ -247,6 +265,8 @@ git push origin feature/amazing-feature
 - Performance enhancements
 - Accessibility improvements
 - Mobile experience refinements
+- API management and error handling
+- New AI provider integrations
 
 ## 📄 License
 
