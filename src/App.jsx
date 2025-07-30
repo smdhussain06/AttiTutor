@@ -122,7 +122,7 @@ Create a story that feels so authentic, I could imagine it actually happening wi
     const friend2 = friends[1] || friends[0]
     const friend3 = friends[2] || friends[1] || friends[0]
     
-    return `<div class="font-medium text-lg mb-3">${friend1.name}'s Psychology-Based Guide to ${topic}</div>
+    return `<div class="font-medium text-lg mb-3">${friend1.name}'s Friendship-Based Guide to ${topic}</div>
 
 <div class="mb-4">Last week, I was hanging out with ${friend1.name}${friend1.memory ? ` (who, as you know, ${friend1.memory})` : ''} when the topic of ${topic} came up. What happened next was actually a perfect real-life demonstration of how this concept works.</div>
 
@@ -176,7 +176,7 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <header className="text-center mb-12">
           <h1 className="text-4xl font-light text-gray-800 mb-4">
-            Nostalgic Tutor
+            Atti Tutor
           </h1>
           <p className="text-gray-600 text-lg">
             Learn anything through stories about your friends

@@ -1,10 +1,10 @@
-# 🎓 Nostalgic Tutor
+# 🎓 Atti Tutor
 
-A personalized learning app that uses your friends' personalities and memories to create engaging, memorable explanations for any topic.
+A friendship-based personalized learning app that uses your friends' personalities and memories to create engaging, memorable explanations for any topic.
 
 ## ✨ Features
 
-- **Personalized Learning**: Uses your friends' personalities and memories to create relatable analogies
+- **Friendship-Based Learning**: Uses your friends' personalities and memories to create relatable analogies
 - **Psychology-Based AI**: Creates authentic scenarios that match your friends' psychological profiles
 - **Any Topic**: Learn anything from quantum physics to cooking techniques
 - **Beautiful UI**: Clean, modern interface inspired by Google Pixel design
