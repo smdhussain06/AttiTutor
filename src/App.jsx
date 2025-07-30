@@ -1,6 +1,9 @@
 import { useState } from 'react'
 
 function App() {
+  // Add error logging for debugging
+  console.log('App component loading...')
+  
   const [topic, setTopic] = useState('')
   const [friends, setFriends] = useState([])
   const [response, setResponse] = useState('')
@@ -29,7 +32,8 @@ function App() {
   }
 
   const getApiKey = () => {
-    return import.meta.env.VITE_QWEN_API_KEY || localStorage.getItem('VITE_QWEN_API_KEY')
+    // For production, only check localStorage since environment variables aren't available
+    return import.meta.env.VITE_QWEN_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem('VITE_QWEN_API_KEY') : null)
   }
 
   const addFriend = (e) => {
