@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>Atti Tutor</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -16,7 +16,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: #f5f7fa;
             min-height: 100vh;
             padding: 2rem;
             line-height: 1.6;
@@ -76,6 +76,9 @@
             background: rgba(255, 255, 255, 0.9);
             transition: all 0.3s ease;
             font-family: inherit;
+            -webkit-appearance: none;
+            appearance: none;
+            -webkit-tap-highlight-color: transparent;
         }
         
         input:focus, textarea:focus {
@@ -87,7 +90,7 @@
         
         button { 
             width: 100%;
-            background: linear-gradient(135deg, #007aff 0%, #0051d5 100%);
+            background: #007aff;
             color: white; 
             border: none; 
             cursor: pointer; 
@@ -99,9 +102,12 @@
             transition: all 0.3s ease;
             font-family: inherit;
             letter-spacing: -0.01em;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
         
         button:hover:not(:disabled) { 
+            background: #0051d5;
             transform: translateY(-1px);
             box-shadow: 0 8px 25px rgba(0, 122, 255, 0.3);
         }
@@ -111,7 +117,7 @@
         }
         
         button:disabled { 
-            background: linear-gradient(135deg, #d1d1d6 0%, #a1a1aa 100%);
+            background: #d1d1d6;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
@@ -125,7 +131,7 @@
         }
         
         .friend { 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+            background: rgba(255, 255, 255, 0.9);
             padding: 1.8rem; 
             border-radius: 16px; 
             border: 1px solid rgba(0, 0, 0, 0.06);
@@ -148,7 +154,7 @@
             position: absolute; 
             top: 1rem; 
             right: 1rem; 
-            background: linear-gradient(135deg, #ff3b30 0%, #d70015 100%);
+            background: #ff3b30;
             color: white; 
             border: none; 
             border-radius: 50%; 
@@ -164,12 +170,13 @@
         }
         
         .remove-btn:hover {
+            background: #d70015;
             transform: scale(1.1);
             box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
         }
         
         .story { 
-            background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(0, 199, 190, 0.05) 100%);
+            background: rgba(0, 122, 255, 0.05);
             padding: 2.5rem; 
             border-radius: 16px; 
             border: 1px solid rgba(0, 122, 255, 0.1);
@@ -184,7 +191,7 @@
         }
         
         .api-key-form {
-            background: linear-gradient(135deg, rgba(255, 204, 0, 0.1) 0%, rgba(255, 149, 0, 0.1) 100%);
+            background: rgba(255, 204, 0, 0.1);
             border: 1px solid rgba(255, 149, 0, 0.2) !important;
         }
         
@@ -207,26 +214,29 @@
         }
         
         .green-btn {
-            background: linear-gradient(135deg, #30d158 0%, #248a3d 100%) !important;
+            background: #30d158 !important;
         }
         
         .green-btn:hover:not(:disabled) {
+            background: #248a3d !important;
             box-shadow: 0 8px 25px rgba(48, 209, 88, 0.3) !important;
         }
         
         .orange-btn {
-            background: linear-gradient(135deg, #ff9500 0%, #e8890b 100%) !important;
+            background: #ff9500 !important;
         }
         
         .orange-btn:hover:not(:disabled) {
+            background: #e8890b !important;
             box-shadow: 0 8px 25px rgba(255, 149, 0, 0.3) !important;
         }
         
         .gray-btn {
-            background: linear-gradient(135deg, #8e8e93 0%, #6d6d70 100%) !important;
+            background: #8e8e93 !important;
         }
         
         .gray-btn:hover:not(:disabled) {
+            background: #6d6d70 !important;
             box-shadow: 0 8px 25px rgba(142, 142, 147, 0.3) !important;
         }
         
@@ -247,22 +257,148 @@
         }
         
         @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
             .app {
-                margin: 1rem;
-                padding: 2rem;
+                margin: 0;
+                padding: 1.5rem;
                 border-radius: 16px;
+                max-width: 100%;
             }
             
             h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 2rem;
+            }
+            
+            .form {
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+            }
+            
+            .form h3 {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+            }
+            
+            input, textarea {
+                padding: 0.9rem 1rem;
+                font-size: 1rem;
+            }
+            
+            button {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
             }
             
             .friends {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .friend {
+                padding: 1.2rem;
             }
             
             .button-group {
                 flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .story {
+                padding: 1.5rem;
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+            
+            .remove-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+            }
+            
+            .app {
+                padding: 1rem;
+                border-radius: 12px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+                letter-spacing: -0.01em;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .form {
+                padding: 1rem;
+                margin: 1rem 0;
+                border-radius: 12px;
+            }
+            
+            .form h3 {
+                font-size: 1.1rem;
+            }
+            
+            input, textarea, button {
+                padding: 0.8rem;
+                font-size: 0.95rem;
+                border-radius: 10px;
+            }
+            
+            .friend {
+                padding: 1rem;
+                border-radius: 12px;
+            }
+            
+            .friend strong {
+                font-size: 1.1rem;
+            }
+            
+            .story {
+                padding: 1rem;
+                border-radius: 12px;
+                font-size: 0.95rem;
+            }
+            
+            .empty-state {
+                padding: 2rem;
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-height: 600px) and (orientation: landscape) {
+            .app {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .subtitle {
+                margin-bottom: 1.5rem;
+            }
+            
+            .form {
+                padding: 1.5rem;
+                margin: 1rem 0;
             }
         }
     </style>
