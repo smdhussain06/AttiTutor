@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atti Tutor</title>
+    <title>Atti Tutor - Working Version</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -35,6 +35,7 @@
         .friend { background: #eff6ff; padding: 1rem; border-radius: 0.5rem; border: 1px solid #bfdbfe; position: relative; }
         .remove-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: #ef4444; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 0.8rem; }
         .story { background: #f0f9ff; padding: 2rem; border-radius: 0.5rem; border: 1px solid #0ea5e9; margin-top: 2rem; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -78,7 +79,7 @@
                     <p>Last week, I was hanging out with ${friend1.name}${friend1.memory ? ` (who, as you know, ${friend1.memory})` : ''} when the topic of ${topic} came up. What happened next was actually a perfect real-life demonstration of how this concept works.</p>
                     
                     <p><strong>The Setup:</strong><br>
-                    We were at ${friend1.name}'s place, and ${friend1.memory ? 'given their personality, they naturally' : 'they'} started approaching ${topic} in their typical way. ${friends.length > 1 ? `${friend2.name} was there too, and they immediately had a completely different perspective.` : ''}</p>
+                    We were at ${friend1.name}'s place, and ${friend1.memory ? `given their personality, they naturally` : 'they'} started approaching ${topic} in their typical way. ${friends.length > 1 ? `${friend2.name} was there too, and they immediately had a completely different perspective.` : ''}</p>
                     
                     <p><strong>The Learning Journey:</strong><br>
                     What struck me was how ${friend1.name} naturally broke down ${topic} into manageable pieces - just like they handle everything in life. ${friend1.memory ? `You know how they ${friend1.memory}? Well, they applied that same approach here.` : 'Their methodical nature really showed.'}</p>
@@ -98,7 +99,7 @@
                     <p className="subtitle">Learn anything through stories about your friends</p>
                     
                     <div className="success">
-                        ✅ Working! This bypasses all build issues and uses CDN React.
+                        ✅ React app is now working! This is a CDN-based version that bypasses build issues.
                     </div>
                     
                     <div className="form">
@@ -188,12 +189,19 @@
                     {story && (
                         <div className="story" dangerouslySetInnerHTML={{__html: story}} />
                     )}
+                    
+                    <div style={{marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid #e5e7eb', textAlign: 'center', fontSize: '0.9rem', color: '#6b7280'}}>
+                        🔧 CDN-based React version | <a href="./debug.html" style={{color: '#3b82f6'}}>Debug Page</a>
+                    </div>
                 </div>
             );
         }
 
+        // Render the app
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(React.createElement(AttiTutor));
+
+        console.log('CDN-based Atti Tutor loaded successfully!');
     </script>
 </body>
 </html>
