@@ -1,5 +1,25 @@
 import React, { useState } from 'react'
 
+// Add global error handler for debugging
+window.addEventListener('error', (event) => {
+  console.error('Global error:', event.error, event.filename, event.lineno, event.colno);
+  // Show error on page if possible
+  const errorDiv = document.createElement('div');
+  errorDiv.style.cssText = 'position:fixed;top:0;left:0;right:0;background:red;color:white;padding:10px;z-index:9999;';
+  errorDiv.textContent = `Error: ${event.error?.message || 'Unknown error'} at ${event.filename}:${event.lineno}`;
+  document.body?.appendChild(errorDiv);
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason);
+  const errorDiv = document.createElement('div');
+  errorDiv.style.cssText = 'position:fixed;top:20px;left:0;right:0;background:orange;color:white;padding:10px;z-index:9999;';
+  errorDiv.textContent = `Promise Error: ${event.reason}`;
+  document.body?.appendChild(errorDiv);
+});
+
+console.log('App.jsx loaded successfully');
+
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -41,8 +61,9 @@ class ErrorBoundary extends React.Component {
 }
 
 function App() {
-  // Add error logging for debugging
-  console.log('App component loading...')
+  // Add comprehensive error logging for debugging
+  console.log('App component starting...');
+  console.log('Initializing state...');
   
   const [topic, setTopic] = useState('')
   const [friends, setFriends] = useState([])
@@ -52,6 +73,8 @@ function App() {
   const [newFriend, setNewFriend] = useState({ name: '', memory: '' })
   const [showApiSetup, setShowApiSetup] = useState(false)
   const [tempApiKey, setTempApiKey] = useState('')
+  
+  console.log('State initialized successfully');
 
   const clearApiKey = () => {
     try {
@@ -265,7 +288,11 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
     setNewFriend({ name: '', memory: '' })
   }
 
-  return (
+  console.log('About to render App component...');
+
+  // Add a try-catch around the return for safety
+  try {
+    return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <header className="text-center mb-12">
@@ -600,13 +627,61 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
       </div>
     </div>
   )
+  } catch (error) {
+    console.error('Error rendering App component:', error);
+    return (
+      <div style={{minHeight: '100vh', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem'}}>
+        <div style={{background: 'white', padding: '2rem', borderRadius: '1rem', maxWidth: '500px', textAlign: 'center'}}>
+          <h1 style={{color: '#dc2626', marginBottom: '1rem'}}>App Rendering Error</h1>
+          <p style={{color: '#7f1d1d', marginBottom: '1rem'}}>Something went wrong while rendering the app.</p>
+          <pre style={{background: '#fef2f2', padding: '1rem', borderRadius: '0.5rem', fontSize: '0.75rem', overflow: 'auto'}}>
+            {error.toString()}
+          </pre>
+          <button 
+            onClick={() => window.location.reload()}
+            style={{background: '#dc2626', color: 'white', padding: '0.5rem 1rem', borderRadius: '0.5rem', border: 'none', cursor: 'pointer', marginTop: '1rem'}}
+          >
+            Reload Page
+          </button>
+        </div>
+      </div>
+    );
+  }
 }
 
 // Wrap App with ErrorBoundary
 function AppWithErrorBoundary() {
+  console.log('AppWithErrorBoundary rendering...');
+  
+  // Add a fallback div in case React fails
+  React.useEffect(() => {
+    console.log('App mounted successfully');
+    // Add visible indicator that React is working
+    const indicator = document.createElement('div');
+    indicator.id = 'react-indicator';
+    indicator.style.cssText = 'position:fixed;top:0;right:0;background:green;color:white;padding:5px;z-index:10000;';
+    indicator.textContent = 'React Loaded ✓';
+    document.body.appendChild(indicator);
+    
+    return () => {
+      const existing = document.getElementById('react-indicator');
+      if (existing) existing.remove();
+    };
+  }, []);
+
   return (
     <ErrorBoundary>
-      <App />
+      <div style={{minHeight: '100vh', background: '#f9fafb'}}>
+        <div style={{padding: '2rem', textAlign: 'center'}}>
+          <h1 style={{fontSize: '2rem', color: '#1f2937', marginBottom: '1rem'}}>
+            🎓 Atti Tutor Debug Mode
+          </h1>
+          <p style={{color: '#6b7280', marginBottom: '2rem'}}>
+            If you see this, React is working! Loading full app...
+          </p>
+          <App />
+        </div>
+      </div>
     </ErrorBoundary>
   )
 }
