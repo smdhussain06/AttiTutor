@@ -1,4 +1,44 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
+
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('App Error:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="bg-white rounded-2xl shadow-lg border border-red-200 p-8 max-w-md">
+            <h1 className="text-2xl font-bold text-red-600 mb-4">Oops! Something went wrong</h1>
+            <p className="text-gray-600 mb-4">There was an error loading Atti Tutor.</p>
+            <pre className="text-xs bg-gray-100 p-3 rounded overflow-auto mb-4">
+              {this.state.error?.toString()}
+            </pre>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 function App() {
   // Add error logging for debugging
@@ -14,26 +54,50 @@ function App() {
   const [tempApiKey, setTempApiKey] = useState('')
 
   const clearApiKey = () => {
-    localStorage.removeItem('VITE_QWEN_API_KEY')
-    window.location.reload()
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('VITE_QWEN_API_KEY')
+      }
+      window.location.reload()
+    } catch (error) {
+      console.error('Error clearing API key:', error)
+      window.location.reload()
+    }
   }
 
   const handleApiKeySubmit = (e) => {
     e.preventDefault()
     if (tempApiKey.trim()) {
-      // For demonstration purposes, we'll store it in localStorage
-      // Note: In production, this should be handled more securely
-      localStorage.setItem('VITE_QWEN_API_KEY', tempApiKey.trim())
-      setTempApiKey('')
-      setShowApiSetup(false)
-      // Reload the page to apply the new API key
-      window.location.reload()
+      try {
+        // For demonstration purposes, we'll store it in localStorage
+        // Note: In production, this should be handled more securely
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('VITE_QWEN_API_KEY', tempApiKey.trim())
+        }
+        setTempApiKey('')
+        setShowApiSetup(false)
+        // Reload the page to apply the new API key
+        window.location.reload()
+      } catch (error) {
+        console.error('Error saving API key:', error)
+        // Continue without localStorage
+        setTempApiKey('')
+        setShowApiSetup(false)
+      }
     }
   }
 
   const getApiKey = () => {
-    // For production, only check localStorage since environment variables aren't available
-    return import.meta.env.VITE_QWEN_API_KEY || (typeof localStorage !== 'undefined' ? localStorage.getItem('VITE_QWEN_API_KEY') : null)
+    try {
+      // For production, only check localStorage since environment variables aren't available
+      const envKey = import.meta.env.VITE_QWEN_API_KEY;
+      const localKey = typeof localStorage !== 'undefined' ? localStorage.getItem('VITE_QWEN_API_KEY') : null;
+      console.log('API Key check - env:', !!envKey, 'local:', !!localKey);
+      return envKey || localKey;
+    } catch (error) {
+      console.error('Error getting API key:', error);
+      return null;
+    }
   }
 
   const addFriend = (e) => {
@@ -532,4 +596,13 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
   )
 }
 
-export default App
+// Wrap App with ErrorBoundary
+function AppWithErrorBoundary() {
+  return (
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  )
+}
+
+export default AppWithErrorBoundary
