@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atti Tutor - Debug</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        .status {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-family: monospace;
+        }
+        .error { background: #fee2e2; color: #dc2626; }
+        .success { background: #dcfce7; color: #16a34a; }
+        .info { background: #dbeafe; color: #2563eb; }
+        button {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0.5rem;
+        }
+        button:hover { background: #2563eb; }
+        .debug { font-size: 0.8rem; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Atti Tutor - Debug Mode</h1>
+        <p>Troubleshooting GitHub Pages deployment...</p>
+        
+        <div id="status" class="status info">
+            🔍 Running diagnostics...
+        </div>
+        
+        <div id="debug" class="debug"></div>
+        
+        <button onclick="runDiagnostics()">Run Diagnostics</button>
+        <button onclick="testReactApp()">Test React App</button>
+        <button onclick="window.location.reload()">Reload</button>
+        
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+            <h3>Manual Tests:</h3>
+            <p><a href="./test.html" style="color: #3b82f6;">Static Test Page</a></p>
+            <p><a href="./assets/" style="color: #3b82f6;">Assets Folder</a></p>
+        </div>
+    </div>
+    
+    <script>
+        let debugLog = '';
+        
+        function log(message, type = 'info') {
+            console.log(message);
+            debugLog += `[${type.toUpperCase()}] ${message}\n`;
+            updateDebugDisplay();
+        }
+        
+        function updateDebugDisplay() {
+            document.getElementById('debug').innerHTML = '<pre>' + debugLog + '</pre>';
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+        }
+        
+        async function runDiagnostics() {
+            debugLog = '';
+            log('Starting diagnostics...');
+            updateStatus('🔍 Running diagnostics...', 'info');
+            
+            // Test 1: Check current URL
+            log(`Current URL: ${window.location.href}`);
+            log(`Base URL: ${window.location.origin}`);
+            log(`Path: ${window.location.pathname}`);
+            
+            // Test 2: Check if we can access assets
+            try {
+                const response = await fetch('./assets/');
+                log(`Assets folder status: ${response.status}`);
+                if (response.ok) {
+                    log('✅ Assets folder accessible');
+                } else {
+                    log('❌ Assets folder not accessible');
+                }
+            } catch (error) {
+                log(`❌ Assets folder error: ${error.message}`, 'error');
+            }
+            
+            // Test 3: Check for React files
+            try {
+                const jsFiles = document.querySelectorAll('script[src*="assets"]');
+                const cssFiles = document.querySelectorAll('link[href*="assets"]');
+                log(`Found ${jsFiles.length} JS files and ${cssFiles.length} CSS files in original page`);
+                
+                // Try to fetch the main JS file
+                if (jsFiles.length > 0) {
+                    const jsUrl = jsFiles[0].src;
+                    log(`Testing JS file: ${jsUrl}`);
+                    const jsResponse = await fetch(jsUrl);
+                    log(`JS file status: ${jsResponse.status}`);
+                }
+            } catch (error) {
+                log(`❌ React files test error: ${error.message}`, 'error');
+            }
+            
+            // Test 4: Check localStorage
+            try {
+                localStorage.setItem('test', 'value');
+                localStorage.removeItem('test');
+                log('✅ localStorage working');
+            } catch (error) {
+                log(`❌ localStorage error: ${error.message}`, 'error');
+            }
+            
+            updateStatus('✅ Diagnostics complete - check debug log', 'success');
+        }
+        
+        async function testReactApp() {
+            updateStatus('🧪 Testing React app load...', 'info');
+            log('Attempting to load React app...');
+            
+            try {
+                // Try to load React dynamically
+                const script = document.createElement('script');
+                script.src = './assets/index-C4sP6SgN.js';
+                script.type = 'module';
+                script.crossOrigin = 'anonymous';
+                
+                script.onload = () => {
+                    log('✅ React script loaded successfully');
+                    updateStatus('✅ React script loaded', 'success');
+                };
+                
+                script.onerror = (error) => {
+                    log(`❌ React script failed to load: ${error}`, 'error');
+                    updateStatus('❌ React script failed to load', 'error');
+                };
+                
+                document.head.appendChild(script);
+                
+                // Also try to load CSS
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = './assets/index-BPYBpAVr.css';
+                link.crossOrigin = 'anonymous';
+                document.head.appendChild(link);
+                
+            } catch (error) {
+                log(`❌ Error testing React app: ${error.message}`, 'error');
+                updateStatus('❌ React app test failed', 'error');
+            }
+        }
+        
+        // Auto-run diagnostics on page load
+        window.addEventListener('load', () => {
+            setTimeout(runDiagnostics, 500);
+        });
+        
+        log('Debug page loaded successfully');
+    </script>
+</body>
+</html>
