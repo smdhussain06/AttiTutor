@@ -169,14 +169,16 @@ FORMATTING RULES:
 
 Create a story that feels so authentic, I could imagine it actually happening with these specific friends!`
 
-        const response = await fetch('https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions', {
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`
+            'Authorization': `Bearer ${apiKey}`,
+            'HTTP-Referer': window.location.origin,
+            'X-Title': 'Atti Tutor'
           },
           body: JSON.stringify({
-            model: 'qwen-turbo',
+            model: 'qwen/qwen-2.5-72b-instruct',
             messages: [
               {
                 role: 'system',
@@ -194,16 +196,16 @@ Create a story that feels so authentic, I could imagine it actually happening wi
 
         if (!response.ok) {
           const errorText = await response.text()
-          console.error('Qwen API error:', response.status, errorText)
+          console.error('OpenRouter API error:', response.status, errorText)
           throw new Error(`API request failed: ${response.status}`)
         }
 
         const data = await response.json()
         return data.choices[0].message.content
       } catch (error) {
-        console.error('Qwen API error:', error)
-        return getMockResponse(topic, friends)
-      }
+          console.error('OpenRouter API error:', error)
+          return getMockResponse(topic, friends)
+        }
     } else {
       return getMockResponse(topic, friends)
     }
@@ -314,20 +316,24 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
                     🚀 Get Better AI Responses with Qwen API
                   </h3>
                   <p className="text-gray-600 mb-4">
-                    Currently using mock responses. For personalized, intelligent explanations powered by Qwen AI, get your free API key!
+                    Currently using mock responses. For personalized, intelligent explanations powered by Qwen AI via OpenRouter, get your free API key!
                   </p>
                   
                   <div className="space-y-3 mb-4">
                     <div className="flex items-center text-sm text-gray-700">
                       <span className="font-medium text-blue-600 mr-2">1.</span>
-                      Visit <a href="https://dashscope.aliyun.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-medium">DashScope by Alibaba Cloud</a>
+                      Visit <a href="https://openrouter.ai/qwen/qwen3-235b-a22b-thinking-2507" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-medium">OpenRouter Qwen API</a>
                     </div>
                     <div className="flex items-center text-sm text-gray-700">
                       <span className="font-medium text-blue-600 mr-2">2.</span>
-                      Create a free account and get your API key
+                      Click on the "API" section below the model information
                     </div>
                     <div className="flex items-center text-sm text-gray-700">
                       <span className="font-medium text-blue-600 mr-2">3.</span>
+                      Create an account, get your API key, and copy it
+                    </div>
+                    <div className="flex items-center text-sm text-gray-700">
+                      <span className="font-medium text-blue-600 mr-2">4.</span>
                       Add your API key below or create <code className="bg-gray-200 px-2 py-1 rounded text-xs">.env.local</code> file with <code className="bg-gray-200 px-2 py-1 rounded text-xs">VITE_QWEN_API_KEY=your_key</code>
                     </div>
                   </div>
@@ -371,7 +377,7 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
                   ) : (
                     <div className="flex flex-wrap gap-2">
                       <a 
-                        href="https://dashscope.aliyun.com/" 
+                        href="https://openrouter.ai/qwen/qwen3-235b-a22b-thinking-2507" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
@@ -391,7 +397,7 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
                         </svg>
                       </button>
                       <a 
-                        href="https://help.aliyun.com/zh/dashscope/developer-reference/api-details" 
+                        href="https://openrouter.ai/docs" 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors duration-200"
@@ -583,7 +589,7 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
                   </p>
                   {!getApiKey() && (
                     <p className="text-xs text-blue-600 text-center mt-2">
-                      ⚡ Using mock responses. <a href="https://dashscope.aliyun.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-800">Get Qwen API key</a> for personalized AI explanations!
+                      ⚡ Using mock responses. <a href="https://openrouter.ai/qwen/qwen3-235b-a22b-thinking-2507" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-800">Get Qwen API key</a> for personalized AI explanations!
                     </p>
                   )}
                 </div>
