@@ -10,6 +10,27 @@ A friendship-based personalized learning app that uses your friends' personaliti
 - **Beautiful UI**: Clean, modern interface inspired by Google Pixel design
 - **AI Integration**: Powered by Qwen AI for intelligent, context-aware explanations
 - **Mobile Responsive**: Works perfectly on all devices
+
+## 🚀 Live Demo
+
+[Try Atti Tutor](https://smdhussain06.github.io/AttiTutor/)
+
+*Note: The live demo uses mock AI responses. For full AI-powered experience, set up your own Qwen API key locally.*
+
+## 🔑 Quick Setup for AI Features
+
+### Get Your Free Qwen API Key:
+
+1. **Visit [DashScope](https://dashscope.aliyun.com/)** - Alibaba Cloud's AI platform
+2. **Create Account** - Sign up for free (no credit card required)
+3. **Get API Key** - Navigate to API Keys section and create a new key
+4. **Add to Project** - Copy your key and add it as `VITE_QWEN_API_KEY` in `.env.local`
+
+### Why Qwen AI?
+- 🆓 **Free tier available** with generous usage limits
+- 🧠 **High-quality responses** tailored to your friends' personalities  
+- 🌐 **Multilingual support** for global users
+- ⚡ **Fast response times** for better user experience
 - **Mobile-First**: Fully responsive design optimized for all devices
 - **Extensible**: Modular code structure ready for API integration
 

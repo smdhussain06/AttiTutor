@@ -7,6 +7,30 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [showAddFriend, setShowAddFriend] = useState(false)
   const [newFriend, setNewFriend] = useState({ name: '', memory: '' })
+  const [showApiSetup, setShowApiSetup] = useState(false)
+  const [tempApiKey, setTempApiKey] = useState('')
+
+  const clearApiKey = () => {
+    localStorage.removeItem('VITE_QWEN_API_KEY')
+    window.location.reload()
+  }
+
+  const handleApiKeySubmit = (e) => {
+    e.preventDefault()
+    if (tempApiKey.trim()) {
+      // For demonstration purposes, we'll store it in localStorage
+      // Note: In production, this should be handled more securely
+      localStorage.setItem('VITE_QWEN_API_KEY', tempApiKey.trim())
+      setTempApiKey('')
+      setShowApiSetup(false)
+      // Reload the page to apply the new API key
+      window.location.reload()
+    }
+  }
+
+  const getApiKey = () => {
+    return import.meta.env.VITE_QWEN_API_KEY || localStorage.getItem('VITE_QWEN_API_KEY')
+  }
 
   const addFriend = (e) => {
     e.preventDefault()
@@ -36,7 +60,7 @@ function App() {
   }
 
   const generateLearningStory = async (topic, friends) => {
-    const apiKey = import.meta.env.VITE_QWEN_API_KEY
+    const apiKey = getApiKey()
     
     if (apiKey) {
       try {
@@ -183,12 +207,21 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
           </p>
           
           {/* API Status */}
-          <div className="mt-4">
-            {import.meta.env.VITE_QWEN_API_KEY ? (
-              <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                Qwen AI Connected
-              </div>
+          <div className="mt-4 flex items-center justify-center gap-3">
+            {getApiKey() ? (
+              <>
+                <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                  Qwen AI Connected
+                </div>
+                <button
+                  onClick={clearApiKey}
+                  className="text-xs text-red-600 hover:text-red-800 underline"
+                  title="Remove API key to show setup instructions"
+                >
+                  Remove API Key
+                </button>
+              </>
             ) : (
               <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
@@ -196,6 +229,113 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
               </div>
             )}
           </div>
+
+          {/* API Setup Card - Only show when no API key is configured */}
+          {!getApiKey() && (
+            <div className="mt-6 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6">
+              <div className="flex items-start">
+                <div className="flex-shrink-0">
+                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="ml-4 flex-1">
+                  <h3 className="text-lg font-medium text-gray-800 mb-2">
+                    🚀 Get Better AI Responses with Qwen API
+                  </h3>
+                  <p className="text-gray-600 mb-4">
+                    Currently using mock responses. For personalized, intelligent explanations powered by Qwen AI, get your free API key!
+                  </p>
+                  
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center text-sm text-gray-700">
+                      <span className="font-medium text-blue-600 mr-2">1.</span>
+                      Visit <a href="https://dashscope.aliyun.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline font-medium">DashScope by Alibaba Cloud</a>
+                    </div>
+                    <div className="flex items-center text-sm text-gray-700">
+                      <span className="font-medium text-blue-600 mr-2">2.</span>
+                      Create a free account and get your API key
+                    </div>
+                    <div className="flex items-center text-sm text-gray-700">
+                      <span className="font-medium text-blue-600 mr-2">3.</span>
+                      Add your API key below or create <code className="bg-gray-200 px-2 py-1 rounded text-xs">.env.local</code> file with <code className="bg-gray-200 px-2 py-1 rounded text-xs">VITE_QWEN_API_KEY=your_key</code>
+                    </div>
+                  </div>
+                  
+                  {/* API Key Input Form */}
+                  {showApiSetup ? (
+                    <form onSubmit={handleApiKeySubmit} className="mt-4 p-4 bg-white rounded-lg border border-blue-300">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Enter your Qwen API Key:
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="password"
+                          value={tempApiKey}
+                          onChange={(e) => setTempApiKey(e.target.value)}
+                          placeholder="sk-..."
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                          required
+                        />
+                        <button
+                          type="submit"
+                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowApiSetup(false)
+                            setTempApiKey('')
+                          }}
+                          className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 text-sm font-medium rounded-lg transition-colors duration-200"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-2">
+                        ⚠️ For demo purposes only. In production, use environment variables.
+                      </p>
+                    </form>
+                  ) : (
+                    <div className="flex flex-wrap gap-2">
+                      <a 
+                        href="https://dashscope.aliyun.com/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
+                      >
+                        Get API Key
+                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                      <button
+                        onClick={() => setShowApiSetup(true)}
+                        className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200"
+                      >
+                        Add API Key Here
+                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                      </button>
+                      <a 
+                        href="https://help.aliyun.com/zh/dashscope/developer-reference/api-details" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors duration-200"
+                      >
+                        API Documentation
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </header>
 
         <div className="space-y-8">
@@ -373,6 +513,11 @@ ${friends.length > 2 ? `<div class="mb-4">${friend3.name} joined the conversatio
                   <p className="text-sm text-gray-500 text-center">
                     💡 This explanation was crafted using your friends as analogies to help you remember better!
                   </p>
+                  {!getApiKey() && (
+                    <p className="text-xs text-blue-600 text-center mt-2">
+                      ⚡ Using mock responses. <a href="https://dashscope.aliyun.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-800">Get Qwen API key</a> for personalized AI explanations!
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

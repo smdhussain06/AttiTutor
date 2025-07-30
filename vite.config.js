@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/AttiTutor/', // This matches your GitHub repository name
+  base: process.env.NODE_ENV === 'production' ? '/AttiTutor/' : '/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets'
